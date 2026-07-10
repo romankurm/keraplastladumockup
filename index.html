@@ -31,7 +31,7 @@
     tr,
     td {
         font-family: 'Poppins', sans-serif;
-        font-size: 26px;
+        font-size: 20px;
         text-align: center;
         padding: 10px;
         color: black;
@@ -99,6 +99,9 @@
         <div>
             <p style="font-size: 30px;">Luuke kokku: <span id="total-hatches-amount">0</span></p>
         </div>
+        <div>
+            <p id="clock" style="font-size: 30px;"></p>
+        </div>
     </div>
 
     <div class="main-container">
@@ -134,17 +137,40 @@
 <script type="module">
     import { getOrders } from "./data-helper.js";
 
-    let orders = await getOrders();
+    calculateData();
+    setInterval(calculateData, 10000);
 
-    let totalAmount = 0;
-    for (let order of orders) {
-        totalAmount += order.getAmount();
+    updateClock();
+
+    setInterval(updateClock, 1000);
+
+    async function calculateData() {
+
+        console.log("Calculating data...");
+
+        let orders = await getOrders();
+
+        let totalAmount = 0;
+        for (let order of orders) {
+            totalAmount += order.getAmount();
+        }
+
+        let queueInWeeks = totalAmount / 55;
+
+        document.getElementById("queue-in-weeks").innerText = queueInWeeks.toFixed(1);
+        document.getElementById("total-hatches-amount").innerText = totalAmount;
     }
 
-    let queueInWeeks = totalAmount / 55;
+    function updateClock() {
+        const now = new Date();
 
-    document.getElementById("queue-in-weeks").innerText = queueInWeeks.toFixed(1);
-    document.getElementById("total-hatches-amount").innerText = totalAmount;
+        const hours = String(now.getHours()).padStart(2, "0");
+        const minutes = String(now.getMinutes()).padStart(2, "0");
+        const seconds = String(now.getSeconds()).padStart(2, "0");
+
+        document.getElementById("clock").textContent =
+            `${hours}:${minutes}:${seconds}`;
+    }
 </script>
 
 </html>
