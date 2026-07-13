@@ -1,4 +1,26 @@
 export function setupTable(table_body, orders, isMainTable) {
+
+    const ordersCopy = Array.from(orders);
+
+    if (isMainTable) {
+
+        for (let order of ordersCopy) {
+
+            const order_comments = order.getComments();
+
+            if (order_comments != null) {
+                const properties = order_comments.split(" ");
+
+                for (const property of properties) {
+                    if (property.toLowerCase() == "valmis") {
+                        orders.splice(orders.indexOf(order), 1);
+                    }
+                }
+            }
+
+        }
+    }
+
     for (const order of orders) {
     
             let table_row = document.createElement("tr");

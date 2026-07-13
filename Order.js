@@ -18,7 +18,7 @@ export class Order {
 
     static currentOrders = []
 
-    constructor(t_nr, material, so_nr, client, object, task, amount, state, status) {
+    constructor(t_nr, material, so_nr, client, object, task, amount, state, status, completion_date, comments) {
         this.t_nr = t_nr;
         this.material = material;
         this.so_nr = so_nr;
@@ -28,7 +28,16 @@ export class Order {
         this.amount = amount;
         this.state = state;
         this.status =status;
-        this.completion_date = null;
+        this.completion_date = completion_date;
+        this.comments = comments;
+    }
+
+    getComments() {
+        return this.comments;
+    }
+
+    setComments(comments) {
+        this.comments = comments;
     }
 
     getT_nr() {
