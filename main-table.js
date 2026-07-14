@@ -6,7 +6,7 @@
 
     let sortedOrders = await getSortedOrders();
 
-    Order.currentOrders = sortedOrders;
+    Order.currentOrders = Array.from(sortedOrders);
 
     let table_body = document.getElementById("tableBody");
 
@@ -54,8 +54,6 @@ async function updateMainTable() {
 
             if (newOrder.containsComment("valmis"))
                 continue;
-            
-            console.log(`"Found a new order with T: ${newOrder.getT_nr()}`);
 
             Order.currentOrders.push(newOrder);
 
