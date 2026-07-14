@@ -27,7 +27,7 @@ export class Order {
         this.task = task;
         this.amount = amount;
         this.state = state;
-        this.status =status;
+        this.status = status;
         this.completion_date = completion_date;
         this.comments = comments;
     }

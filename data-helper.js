@@ -24,7 +24,7 @@ export async function getOrders() {
         let task = order.productSpec;
         let amount = order.productQuantity;
         let state = "";
-        let status = "active";
+        let status = order.status;
         let completion_date = null;
         let comments = order.comments;
 

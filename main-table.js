@@ -24,17 +24,36 @@ async function getSortedOrders() {
 }
 
 async function updateMainTable() {
-    console.log("Looking for updates...");
     const currentOrders = Order.currentOrders;
 
     const newOrders = await getSortedOrders();
 
     let table_body = document.getElementById("tableBody");
 
+    const order_comments = order.getComments();
+
+    if (order_comments != null) {
+        const properties = order_comments.split(" ");
+
+        for (const property of properties) {
+            if (property.toLowerCase() == "valmis") {
+                    orders.splice(newOrders.indexOf(order), 1);
+            } else if (property.toLowerCase() == "p") {
+
+                    orders.splice(newOrders.indexOf(order), 1);
+                    orders.splice(0, 0, order);
+
+            }
+        }
+    }
+
     if (currentOrders.length < newOrders.length) {
         for (let i = currentOrders.length; i < newOrders.length; ++i) {
 
             const newOrder = newOrders[i];
+
+            if (newOrder.containsComment("valmis"))
+                continue;
             
             console.log(`"Found a new order with T: ${newOrder.getT_nr()}`);
 
