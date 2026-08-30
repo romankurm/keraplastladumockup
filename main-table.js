@@ -17,6 +17,9 @@ async function getSortedOrders() {
     let ordrs = await getOrders();
 
     return ordrs
+        // All four operations finished means the hatch is out the door, so
+        // the row leaves the board.
+        .filter(order => !order.allOperationsDone)
         .filter(order => order.status != "done")
         .filter(order => order.so_nr != null)
         .filter(order => order.task != null);

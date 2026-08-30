@@ -9,4 +9,4 @@ let completedToday = orders.filter(order => order.status == "done");
 
 let table_body = document.getElementById("finished-tasks-table");
 
-setupTable(table_body, completedToday, false);
+setupTable(table_body, completedToday, false);
