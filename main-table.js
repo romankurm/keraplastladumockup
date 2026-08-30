@@ -1,6 +1,5 @@
 
     import { setupTable } from "./table-helper.js";
-    import { addRow } from "./table-helper.js";
     import { getOrders } from "./data-helper.js"
     import { Order } from "./Order.js";
 
@@ -23,42 +22,23 @@ async function getSortedOrders() {
         .filter(order => order.task != null);
 }
 
+/**
+ * Rebuild the table from one fresh read.
+ *
+ * The previous version only appended rows when the order count grew, so an
+ * operation finished on an order already on screen never showed its tick mark,
+ * and a row that should have dropped out stayed. It also dereferenced an
+ * undefined `order` right after the fetch, which threw on every tick before any
+ * of that ran. Redrawing the whole body is cheap at this row count and keeps
+ * every column, not just the tick marks, honest.
+ */
 async function updateMainTable() {
-    const currentOrders = Order.currentOrders;
-
     const newOrders = await getSortedOrders();
 
-    let table_body = document.getElementById("tableBody");
+    Order.currentOrders = Array.from(newOrders);
 
-    const order_comments = order.getComments();
+    const table_body = document.getElementById("tableBody");
+    table_body.innerHTML = "";
 
-    if (order_comments != null) {
-        const properties = order_comments.split(" ");
-
-        for (const property of properties) {
-            if (property.toLowerCase() == "valmis") {
-                    orders.splice(newOrders.indexOf(order), 1);
-            } else if (property.toLowerCase() == "p") {
-
-                    orders.splice(newOrders.indexOf(order), 1);
-                    orders.splice(0, 0, order);
-
-            }
-        }
-    }
-
-    if (currentOrders.length < newOrders.length) {
-        for (let i = currentOrders.length; i < newOrders.length; ++i) {
-
-            const newOrder = newOrders[i];
-
-            if (newOrder.containsComment("valmis"))
-                continue;
-
-            Order.currentOrders.push(newOrder);
-
-            addRow(table_body, newOrder, true);
-
-        }
-    }
+    setupTable(table_body, newOrders, true);
 }
