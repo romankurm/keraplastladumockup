@@ -3,6 +3,10 @@
     import { getOrders } from "./data-helper.js"
     import { Order } from "./Order.js";
 
+    // Declared before the first await: two polls can overlap and a slow
+    // older answer must not repaint over a newer one.
+    let refreshSeq = 0;
+
     let sortedOrders = await getSortedOrders();
 
     Order.currentOrders = Array.from(sortedOrders);
@@ -36,7 +40,10 @@ async function getSortedOrders() {
  * every column, not just the tick marks, honest.
  */
 async function updateMainTable() {
+    const seq = ++refreshSeq;
+
     const newOrders = await getSortedOrders();
+    if (seq !== refreshSeq) return;
 
     Order.currentOrders = Array.from(newOrders);
 
