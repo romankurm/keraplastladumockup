@@ -152,7 +152,11 @@
 </body>
 
 <script type="module">
-    import { getOrders } from "./data-helper.js";
+    import { getOrders, isFinishedOrder } from "./data-helper.js";
+
+    // Declared before the first call: two counts can overlap and a slow
+    // older answer must not repaint over a newer one.
+    let countSeq = 0;
 
     calculateData();
     setInterval(calculateData, 10000);
@@ -163,7 +167,10 @@
 
     async function calculateData() {
 
+        const seq = ++countSeq;
+
         let orders = await getOrders();
+        if (seq !== countSeq) return;
 
         let totalAmount = 0;
         for (let order of orders) {
@@ -174,7 +181,9 @@
                 }
             }
 
-            if (!order.containsComment("valmis"))
+            // Same finished test the tables use, so the queue cannot count
+            // work the board has already taken off.
+            if (!isFinishedOrder(order))
                 totalAmount += order.getAmount();
         }
 
