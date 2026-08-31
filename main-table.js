@@ -1,29 +1,27 @@
 
     import { setupTable } from "./table-helper.js";
-    import { getOrders } from "./data-helper.js"
+    import { getOrders, isFinishedOrder } from "./data-helper.js"
     import { Order } from "./Order.js";
 
     // Declared before the first await: two polls can overlap and a slow
     // older answer must not repaint over a newer one.
     let refreshSeq = 0;
 
-    let sortedOrders = await getSortedOrders();
+    // The interval is armed before the first read, so a screen that fails to
+    // load once still tries again instead of staying blank until somebody
+    // reloads the browser on the wall.
+    setInterval(updateMainTable, 10000);
 
-    Order.currentOrders = Array.from(sortedOrders);
-
-    let table_body = document.getElementById("tableBody");
-
-    setupTable(table_body, sortedOrders, true);
-
-    const intervalID = setInterval(updateMainTable, 10000);
+    await updateMainTable().catch(() => {});
 
 async function getSortedOrders() {
     let ordrs = await getOrders();
 
     return ordrs
-        // All four operations finished means the hatch is out the door, so
-        // the row leaves the board.
-        .filter(order => !order.allOperationsDone)
+        // Same finished and removed tests the queue counter uses, so the board
+        // cannot show a row the counter has already left out.
+        .filter(order => !isFinishedOrder(order))
+        .filter(order => !order.isRemoved())
         .filter(order => order.status != "done")
         .filter(order => order.so_nr != null)
         .filter(order => order.task != null);
