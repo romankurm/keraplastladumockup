@@ -158,7 +158,7 @@
     // older answer must not repaint over a newer one.
     let countSeq = 0;
 
-    calculateData().catch(() => {});
+    calculateData().catch(err => console.error("queue counter failed", err));
     setInterval(calculateData, 10000);
 
     updateClock();

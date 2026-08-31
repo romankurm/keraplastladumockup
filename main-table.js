@@ -12,7 +12,9 @@
     // reloads the browser on the wall.
     setInterval(updateMainTable, 10000);
 
-    await updateMainTable().catch(() => {});
+    // Logged, not swallowed: a silent catch here once turned a one-line bug
+    // into a blank wall screen with nothing to show for it.
+    await updateMainTable().catch(err => console.error("main table refresh failed", err));
 
 async function getSortedOrders() {
     let ordrs = await getOrders();
