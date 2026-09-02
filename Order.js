@@ -18,7 +18,7 @@ export class Order {
 
     static currentOrders = []
 
-    constructor(t_nr, material, so_nr, client, object, task, amount, state, status, completion_date, comments) {
+    constructor(t_nr, material, so_nr, client, object, task, amount, state, status, completion_date, comments, isUrgent, isOnHold) {
         this.t_nr = t_nr;
         this.material = material;
         this.so_nr = so_nr;
@@ -30,6 +30,16 @@ export class Order {
         this.status = status;
         this.completion_date = completion_date;
         this.comments = comments;
+        this._isUrgent = isUrgent;
+        this._isOnHold = isOnHold;
+    }
+
+    isUrgent() {
+        return this._isUrgent;
+    }
+
+    isOnHold() {
+        return this._isOnHold;
     }
 
     getComments() {

@@ -8,100 +8,293 @@
 </head>
 
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
+    :root {
+        --bg: #f4f6f8;
+        --surface: #ffffff;
+        --border: #e2e6ea;
+        --text: #1f2937;
+        --muted: #6b7280;
+
+        --header: #dff5ec;
+        --header-text: #14532d;
+
+        --urgent: #dcfce7;
+        --urgent-border: #86efac;
+
+        --hold: #fef9c3;
+        --hold-border: #fde047;
+
+        --danger: #fee2e2;
+        --danger-text: #b91c1c;
+
+        --shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+    }
+
+    * {
+        box-sizing: border-box;
+    }
 
     body {
-        background-color: #f3e9e0;
+        margin: 0;
+        padding: 24px;
+        background: var(--bg);
+        color: var(--text);
+        font-family: 'Inter', system-ui, sans-serif;
+    }
+
+    /* =========================
+       HEADER
+       ========================= */
+
+    .header-container {
+        display: grid;
+        grid-template-columns: 200px 1fr auto auto;
+        align-items: center;
+        gap: 32px;
+
+        margin-bottom: 24px;
+        padding: 18px 24px;
+
+        background: var(--surface);
+        border: 1px solid var(--border);
+        border-radius: 14px;
+
+        box-shadow: var(--shadow);
+    }
+
+    .logo-container {
+        width: 180px;
+        padding: 0;
+    }
+
+    .logo-container img {
+        display: block;
+        width: 100%;
+        height: auto;
+    }
+
+    .header-container p {
+        margin: 0;
+        font-size: 19px !important;
+        font-weight: 500;
+        color: var(--muted);
+        white-space: nowrap;
+    }
+
+    .header-container span {
+        margin-left: 5px;
+        font-size: 24px;
+        font-weight: 700;
+        color: var(--text);
+    }
+
+    #clock {
+        min-width: 100px;
+        text-align: right;
+        font-variant-numeric: tabular-nums;
+    }
+
+    /* =========================
+       TABLE
+       ========================= */
+
+    .main-container {
+        width: 100%;
     }
 
     table {
         width: 100%;
         border-collapse: separate;
         border-spacing: 0;
-        border-radius: 16px;
+
+        background: var(--surface);
+
+        border: 1px solid var(--border);
+        border-radius: 14px;
+
         overflow: hidden;
-        background: white;
-        box-shadow: 0 10px 16px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+        box-shadow: var(--shadow);
     }
 
     thead tr {
-        background-color: #a8e6cf;
+        background: var(--header);
     }
 
-    tr,
+    thead td {
+        padding: 14px 12px;
+
+        font-size: 15px;
+        font-weight: 700;
+        letter-spacing: 0.02em;
+
+        color: var(--header-text);
+
+        border-bottom: 1px solid #c8e8da;
+    }
+
+    tbody tr {
+        background: white;
+        transition: background-color 0.15s ease;
+    }
+
+    tbody tr:nth-child(even) {
+        background: #fafbfc;
+    }
+
+    tbody tr:hover {
+        background: #f1f5f9;
+    }
+
     td {
-        font-family: 'Poppins', sans-serif;
-        font-size: 20px;
+        padding: 13px 12px;
+
+        font-size: 17px;
+        font-weight: 500;
+
         text-align: center;
-        padding: 10px;
-        color: black;
+        vertical-align: middle;
+
+        color: var(--text);
+
+        border-bottom: 1px solid #edf0f2;
     }
 
-    tr:nth-child(even) {
-        background: whitesmoke;
+    tbody tr:last-child td {
+        border-bottom: none;
     }
 
-    img {
-        width: 100%;
+    /* =========================
+       ORDER STATES
+       ========================= */
+
+    .order-urgent {
+        background-color: var(--urgent) !important;
+        box-shadow: inset 4px 0 0 var(--urgent-border);
     }
 
-    .logo-container {
-        max-width: 200px;
-        width: 100%;
-        padding-bottom: 20px;
+    .order-on-hold {
+        background-color: var(--hold) !important;
+        box-shadow: inset 4px 0 0 var(--hold-border);
     }
 
-    .state-completed {
-        background-color: lightgreen;
+    .order-urgent:hover {
+        background-color: #bbf7d0 !important;
     }
 
-    h1 {
-        font-family: "Inter", system-ui, sans-serif;
-        color: crimson;
+    .order-on-hold:hover {
+        background-color: #fef08a !important;
     }
 
-    .td-done {
-        width: 100%;
-        height: 25px;
-        background-color: lightgreen;
-        border-radius: 14px;
-    }
+    /* =========================
+       OPERATION STATUS
+       ========================= */
 
-    .main-container {
-        display: flex;
-        gap: 10px;
-    }
-
-    #main-table {
-        flex: 1;
-    }
-
-
-    #main-table {
-        min-width: 0;
-    }
-
-    .header-container {
-        display: flex;
-        gap: 300px;
-    }
-
-    /* Solid amber for an operation somebody is on, whether it is running or
-       paused: from across a workshop the useful distinction is finished,
-       started, not started. Sized and aligned to sit level with the tick. */
     .op-running,
     .op-paused {
         display: inline-block;
-        width: 20px;
-        height: 20px;
+
+        width: 17px;
+        height: 17px;
+
         border-radius: 50%;
-        background: #f59e0b;
+
         vertical-align: middle;
     }
 
-    td i[data-lucide] svg,
+    .op-running {
+        background: #f59e0b;
+        box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.15);
+    }
+
+    .op-paused {
+        background: #f97316;
+        box-shadow: 0 0 0 3px rgba(249, 115, 22, 0.15);
+    }
+
+    td i[data-lucide],
     td svg {
+        width: 20px;
+        height: 20px;
         vertical-align: middle;
+    }
+
+    /* =========================
+       STATUS COLORS
+       ========================= */
+
+    .status-active {
+        /* Keep normal appearance */
+    }
+
+    .status-done {
+        background-color: #ecfdf5;
+    }
+
+    .status-problematic {
+        background-color: var(--danger);
+        color: var(--danger-text);
+    }
+
+    /* =========================
+       RESPONSIVE
+       ========================= */
+
+    @media (max-width: 1200px) {
+        body {
+            padding: 16px;
+        }
+
+        .header-container {
+            grid-template-columns: 160px 1fr auto;
+            gap: 20px;
+        }
+
+        .logo-container {
+            width: 150px;
+        }
+
+        #clock {
+            grid-column: 3;
+        }
+
+        td {
+            font-size: 15px;
+            padding: 10px 8px;
+        }
+    }
+
+    @media (max-width: 900px) {
+        .header-container {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .logo-container {
+            width: 160px;
+        }
+
+        #clock {
+            grid-column: auto;
+            text-align: left;
+        }
+
+        .header-container p {
+            font-size: 16px !important;
+        }
+
+        .header-container span {
+            font-size: 20px;
+        }
+
+        table {
+            font-size: 14px;
+        }
+
+        td {
+            font-size: 14px;
+            padding: 9px 6px;
+        }
     }
 </style>
 
@@ -205,4 +398,4 @@
     }
 </script>
 
-</html>
+</html>

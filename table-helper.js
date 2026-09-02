@@ -14,13 +14,17 @@ export function setupTable(table_body, orders, isMainTable) {
                 for (const property of properties) {
                     if (property.toLowerCase() == "valmis") {
                         orders.splice(orders.indexOf(order), 1);
-                    } else if (property.toLowerCase() == "p") {
-
-                        orders.splice(orders.indexOf(order), 1);
-                        orders.splice(0, 0, order);
-
                     }
                 }
+            }
+
+            if (order.isUrgent()) {
+                orders.splice(orders.indexOf(order), 1);
+                orders.splice(0, 0, order);
+            }
+            if (order.isOnHold()) {
+                orders.splice(orders.indexOf(order), 1);
+                orders.push(order);
             }
 
         }
@@ -68,7 +72,13 @@ export function addRow(table_body, order, isMainTable) {
                 table_td.innerHTML = o_table_obj[key];
                 table_row.appendChild(table_td);
             }
-    
+
+            // Urgent / On hold styling
+            if (order.isUrgent()) {
+                table_row.classList.add("order-urgent");
+            } else if (order.isOnHold()) {
+                table_row.classList.add("order-on-hold");
+            }
 
             if (isMainTable) {
                 for (const column of ["l", "n", "p", "k"]) {
@@ -87,7 +97,7 @@ export function addRow(table_body, order, isMainTable) {
                 }
             }
     
-            // VALMIS, PUUDUSED ON DUMMYD SEST MAI OSKA SIIA MIDAGI PANNA HETKEL
+            
             let td_valmis = document.createElement("td");
             let td_puudused = document.createElement("td");
 
@@ -104,4 +114,4 @@ export function addRow(table_body, order, isMainTable) {
     
             table_body.appendChild(table_row);
 
-}
+}
