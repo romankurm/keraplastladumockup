@@ -34,6 +34,10 @@ export class Order {
         this._isOnHold = isOnHold;
     }
 
+    isWood() {
+        return this.material == "P";
+    }
+
     isUrgent() {
         return this._isUrgent;
     }

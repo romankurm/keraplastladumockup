@@ -80,6 +80,10 @@ export function addRow(table_body, order, isMainTable) {
                 table_row.classList.add("order-on-hold");
             }
 
+            if (order.isWood()) {
+                table_row.classList.add("wood-order");
+            }
+
             if (isMainTable) {
                 for (const column of ["l", "n", "p", "k"]) {
                     const state_td = document.createElement("td");
